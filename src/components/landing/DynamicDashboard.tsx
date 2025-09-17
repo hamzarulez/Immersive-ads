@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+// --- STEP 1: Import MotionValue ---
+import { motion, useMotionValue, useTransform, animate, MotionValue } from "framer-motion";
 import { useEffect } from "react";
 import { BarChart2, Bookmark, DollarSign, Gamepad2, Settings, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
@@ -43,10 +44,11 @@ const useAnimatedCounter = (to: number, options: { isCurrency?: boolean; decimal
 
 // --- Brand Dashboard V3 ---
 
-// --- FIX: Define a specific type for StatCard props ---
+// --- STEP 2: Update the StatCardProps interface ---
 interface StatCardProps {
     title: string;
-    value: React.ReactNode; // Can be a string or a motion value
+    // Allow the value to be a ReactNode OR a MotionValue
+    value: React.ReactNode | MotionValue<string> | MotionValue<number>; 
     subtext: string;
 }
 const StatCard = ({ title, value, subtext }: StatCardProps) => (
