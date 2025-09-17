@@ -13,16 +13,9 @@ export default function CreatorsPage() {
       <div className="relative z-10 max-w-md rounded-2xl bg-black/70 p-8 text-center shadow-xl">
         <h1 className="text-3xl font-bold mb-4">Creator Dashboard (Locked)</h1>
         <p className="mb-6 text-gray-300">
-          Sign up to unlock your creator dashboard and start monetizing your
+          Your creator dashboard, start monetizing your
           games with immersive ads.
         </p>
-
-        <form className="space-y-4">
-          <Input placeholder="Enter your email" type="email" required />
-          <Button className="w-full bg-indigo-500 hover:bg-indigo-600">
-            Sign Up
-          </Button>
-        </form>
       </div>
     </div>
   );

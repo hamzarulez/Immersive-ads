@@ -13,16 +13,8 @@ export default function BrandsPage() {
       <div className="relative z-10 max-w-md rounded-2xl bg-black/70 p-8 text-center shadow-xl">
         <h1 className="text-3xl font-bold mb-4">Brand Dashboard (Locked)</h1>
         <p className="mb-6 text-gray-300">
-          Sign up to unlock your Immersive Ads brand dashboard and start
-          connecting with creators.
+          Your brand dashboard, review your Immersive Ads analytics with creators now.
         </p>
-
-        <form className="space-y-4">
-          <Input placeholder="Enter your email" type="email" required />
-          <Button className="w-full bg-pink-500 hover:bg-pink-600">
-            Sign Up
-          </Button>
-        </form>
       </div>
     </div>
   );
