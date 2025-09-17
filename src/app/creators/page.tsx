@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-
 export default function CreatorsPage() {
   return (
     <div className="relative flex h-screen w-full items-center justify-center bg-gradient-to-br from-indigo-700 to-blue-600 text-white">

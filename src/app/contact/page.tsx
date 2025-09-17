@@ -6,8 +6,11 @@ import { Button } from "../../components/ui/button";
 import Footer from "../../components/landing/Footer";
 import Header from "../../components/landing/Header";
 
-// Reusable Input component for the form
-const FormInput = ({ icon, ...props }: any) => (
+// --- FIX 1: Define specific types for FormInput props ---
+interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon: React.ReactNode;
+}
+const FormInput = ({ icon, ...props }: FormInputProps) => (
   <div className="relative">
     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
       {icon}
@@ -19,8 +22,11 @@ const FormInput = ({ icon, ...props }: any) => (
   </div>
 );
 
-// Reusable Textarea component
-const FormTextarea = ({ icon, ...props }: any) => (
+// --- FIX 2: Define specific types for FormTextarea props ---
+interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+    icon: React.ReactNode;
+}
+const FormTextarea = ({ icon, ...props }: FormTextareaProps) => (
   <div className="relative">
     <div className="absolute top-3.5 left-0 flex items-center pl-3 pointer-events-none">
         {icon}
@@ -46,10 +52,10 @@ export default function ContactPage() {
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                Let's Build the Future of In-Game Ads
+                Let&apos;s Build the Future of In-Game Ads
               </h1>
               <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-                Whether you're a brand ready to launch a campaign or a creator with questions, we're here to help you get started.
+                Whether you&apos;re a brand ready to launch a campaign or a creator with questions, we&apos;re here to help you get started.
               </p>
             </motion.div>
 
@@ -77,9 +83,8 @@ export default function ContactPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                {/* --- UPDATED FORM TAG --- */}
                 <form 
-                  action="https://formspree.io/f/xqadvbko" // <-- PASTE YOUR URL HERE
+                  action="https://formspree.io/f/xqadvbko" 
                   method="POST" 
                   className="space-y-6"
                 >
