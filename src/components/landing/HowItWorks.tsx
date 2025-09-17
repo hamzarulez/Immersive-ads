@@ -28,7 +28,7 @@ export default function HowItWorks() {
       <div className="container max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">A Frictionless Platform for Growth</h2>
         <p className="text-neutral-400 text-center max-w-2xl mx-auto mb-16">
-          Whether you're a brand looking to engage new audiences or a creator ready to monetize, our process is simple, transparent, and built for your ecosystem.
+          Whether you&apos;re a brand looking to engage new audiences or a creator ready to monetize, our process is simple, transparent, and built for your ecosystem.
         </p>
 
         {/* Combined Grid */}

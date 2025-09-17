@@ -56,7 +56,7 @@ export default function ContactSection() {
         >
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Contact Us</h2>
           <p className="text-lg text-neutral-400 mt-4">
-            Get in touch and let's have a chat. We would love to hear from you.
+            Get in touch and let&apos;s have a chat. We would love to hear from you.
           </p>
         </motion.div>
 
@@ -75,7 +75,7 @@ export default function ContactSection() {
             <FormField label="First Name" name="first-name" type="text" placeholder="Peter" halfWidth />
             <FormField label="Last Name" name="last-name" type="text" placeholder="Parker" halfWidth />
             <FormField label="Email" name="email" type="email" placeholder="peter@parker.com" />
-            <FormTextarea label="How can we help you?" name="message" placeholder="I'd like to discuss being a creator/brand with you..." />
+            <FormTextarea label="How can we help you?" name="message" placeholder="I&apos;d like to discuss being a creator/brand with you..." />
             
             <div className="sm:col-span-2 flex justify-center mt-4">
                 <Button type="submit" className="bg-white text-black hover:bg-neutral-200 rounded-full px-12 py-3 text-base font-semibold">

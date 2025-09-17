@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect } from "react";
-import { BarChart2, Bookmark, CheckCircle2, DollarSign, Gamepad2, Settings, XCircle, MoreHorizontal } from "lucide-react";
+import { BarChart2, Bookmark, DollarSign, Gamepad2, Settings, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -42,7 +42,14 @@ const useAnimatedCounter = (to: number, options: { isCurrency?: boolean; decimal
 };
 
 // --- Brand Dashboard V3 ---
-const StatCard = ({ title, value, subtext }: { title: string; value: any; subtext: string }) => (
+
+// --- FIX: Define a specific type for StatCard props ---
+interface StatCardProps {
+    title: string;
+    value: React.ReactNode; // Can be a string or a motion value
+    subtext: string;
+}
+const StatCard = ({ title, value, subtext }: StatCardProps) => (
     <div className="bg-neutral-800/50 border border-neutral-700/50 rounded-xl p-4">
         <p className="text-xs text-neutral-400">{title}</p>
         <motion.p className="text-2xl font-bold text-white">{value}</motion.p>
