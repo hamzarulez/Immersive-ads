@@ -15,7 +15,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  TooltipProps,
 } from 'recharts';
 
 const demos = [
@@ -73,9 +72,17 @@ const engagementData = [
   { week: 'Week 4', rate: 65 },
 ];
 
-type CustomTooltipProps = TooltipProps<number, string> & {
+interface PayloadItem {
+  value: number;
+  name: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: PayloadItem[];
+  label?: string;
   valueFormatter: (value: number) => string;
-};
+}
 
 const CustomTooltip = ({ active, payload, label, valueFormatter }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
