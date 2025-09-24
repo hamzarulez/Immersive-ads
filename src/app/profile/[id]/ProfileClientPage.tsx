@@ -6,7 +6,7 @@ import Image from 'next/image' // Import Image
 import { getOrCreateConversation } from '../../../app/messages/actions'
 import { Gamepad2, Globe, UserCircle, Briefcase, Mail } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
-import { Database } from '@/types/supabase' // Import Database for typing
+import { Database } from '../../../types/supabase' // Import Database for typing
 
 // --- FIX: Define types for props ---
 type Profile = Database['public']['Tables']['profiles']['Row']
