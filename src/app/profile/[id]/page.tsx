@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation'
 import ProfileClientPage from './ProfileClientPage' // Import the new client component
 
 // This is now purely a Server Component. It fetches data and passes it down.
-export default async function ProfilePage({ params }: { params: { id: string } }) {
+export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params; // Await params to resolve the Promise
     const supabase = await createClient() // Add await here
 
     const { data: profile } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single(); 
 
     if (!profile) {
@@ -19,7 +20,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
     const { data: listings } = await supabase
         .from('listings')
         .select('*')
-        .eq('creator_id', params.id)
+        .eq('creator_id', id)
         .eq('status', 'Active');
     
     // Map listings to match expected Listing type (id as string, non-null fields)
