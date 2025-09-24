@@ -302,11 +302,11 @@ export default function DemoPage() {
                     <div className="text-center">
                         <h3 className="text-3xl font-bold mb-4">Ready to Go Viral?</h3>
                         <p className="text-neutral-400 mb-8 max-w-2xl mx-auto">
-                            Let's craft a filter that turns your brand into the next big trend. Book a 15-min call—your first campaign's on us.
+                            Let&apos;s craft a filter that turns your brand into the next big trend.
                         </p>
                         <Link href="/#contact">
                             <Button size="lg" className="bg-gradient-to-r from-pink-500 to-indigo-600 hover:from-pink-600 hover:to-indigo-700 rounded-full px-10 py-4 text-lg font-bold shadow-lg">
-                                Book Demo Call <MoveRight className="ml-2 h-6 w-6" />
+                                Contact Us <MoveRight className="ml-2 h-6 w-6" />
                             </Button>
                         </Link>
                     </div>
