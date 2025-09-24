@@ -3,14 +3,22 @@
 import { useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
+import type { User } from '@supabase/supabase-js' // Import the User type
+import { Database } from '@/types/supabase' // Import Database for profile typing
 
-// This form takes the user and their profile as initial data
-export default function ProfileForm({ user, profile }: { user: any, profile: any }) {
+// --- FIX: Define specific types for props ---
+type Profile = Database['public']['Tables']['profiles']['Row']
+
+interface ProfileFormProps {
+    user: User | null;
+    profile: Profile | null; // Use specific Profile type instead of 'any'
+}
+
+export default function ProfileForm({ user, profile }: ProfileFormProps) {
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
-  // State for each form field, initialized with data passed from the server
   const [fullName, setFullName] = useState(profile?.full_name || '')
   const [bio, setBio] = useState(profile?.bio || '')
   const [websiteUrl, setWebsiteUrl] = useState(profile?.website_url || '')
@@ -19,6 +27,12 @@ export default function ProfileForm({ user, profile }: { user: any, profile: any
     event.preventDefault()
     setLoading(true)
     setMessage(null)
+
+    if (!user) {
+        setMessage({ type: 'error', text: 'User not found.' });
+        setLoading(false);
+        return;
+    }
 
     const { error } = await supabase.from('profiles').update({
       full_name: fullName,

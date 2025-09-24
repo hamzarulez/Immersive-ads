@@ -1,14 +1,14 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
+// --- FIX: Removed unused 'redirect' import ---
 
 export async function getOrCreateConversation(otherUserId: string) {
-    const supabase = createClient();
+    const supabase = await createClient(); // Add await here
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { return { error: 'Not authenticated' }; }
 
-    // Check if a conversation already exists between these two users
+    // Check if a conversation already exists
     const { data: existingConversation, error: existingError } = await supabase
         .from('conversations')
         .select('id')
@@ -19,12 +19,12 @@ export async function getOrCreateConversation(otherUserId: string) {
         return { conversationId: existingConversation.id };
     }
 
-    if (existingError && existingError.code !== 'PGRST116') { // PGRST116 = no rows found
+    if (existingError && existingError.code !== 'PGRST116') {
         console.error(existingError);
         return { error: 'Could not check for conversation' };
     }
     
-    // If no conversation exists, create a new one
+    // Create a new conversation if one doesn't exist
     const { data: newConversation, error: newError } = await supabase
         .from('conversations')
         .insert({
@@ -44,7 +44,7 @@ export async function getOrCreateConversation(otherUserId: string) {
 
 
 export async function sendMessage(conversationId: number, content: string) {
-    const supabase = createClient();
+    const supabase = await createClient(); // Add await here
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { return { error: 'Not authenticated' }; }
 

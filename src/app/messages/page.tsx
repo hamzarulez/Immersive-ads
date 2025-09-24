@@ -6,91 +6,83 @@ import { signOut } from '@/app/actions';
 import { sendMessage } from './actions';
 import { LayoutDashboard, Briefcase, BarChart2, UserCircle, LogOut, Gamepad2, Send } from 'lucide-react';
 import Link from 'next/link';
+import type { User } from '@supabase/supabase-js';
 
-// --- Main Messaging Page Component ---
+// --- FIX: Define types that match our new RPC function's return value ---
+interface Conversation {
+    conversation_id: number;
+    last_message_at: string;
+    other_participant_id: string;
+    other_participant_full_name: string;
+    other_participant_avatar_url: string | null;
+}
+interface Message {
+    id: number;
+    sender_id: string;
+    content: string;
+}
+
 export default function MessagesPage() {
     const supabase = createClient();
-    const [user, setUser] = useState<any>(null);
-    const [conversations, setConversations] = useState<any[]>([]);
+    const [user, setUser] = useState<User | null>(null);
+    const [conversations, setConversations] = useState<Conversation[]>([]);
     const [activeConversationId, setActiveConversationId] = useState<number | null>(null);
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
-    // Initial data fetch for conversations
     useEffect(() => {
         const fetchInitialData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
 
             if (user) {
-                const { data: conversationsData } = await supabase
-                    .from('conversations')
-                    .select('*, participant_one:profiles!conversations_participant_one_id_fkey(full_name, avatar_url), participant_two:profiles!conversations_participant_two_id_fkey(full_name, avatar_url)')
-                    .or(`participant_one_id.eq.${user.id},participant_two_id.eq.${user.id}`);
-                
+                // --- FIX: Call the new, robust RPC function ---
+                const { data: conversationsData } = await supabase.rpc('get_user_conversations');
                 if (conversationsData) setConversations(conversationsData);
             }
         };
         fetchInitialData();
     }, [supabase]);
 
-    // Fetch messages for the active conversation
     useEffect(() => {
         const fetchMessages = async () => {
             if (activeConversationId) {
                 const { data } = await supabase
                     .from('messages')
-                    .select('*')
+                    .select('id, sender_id, content')
                     .eq('conversation_id', activeConversationId)
                     .order('created_at', { ascending: true });
-                if (data) setMessages(data);
+                if (data) setMessages(data as Message[]);
+            } else {
+                setMessages([]); // Clear messages when no conversation is active
             }
         };
         fetchMessages();
     }, [activeConversationId, supabase]);
 
-    // REALTIME: Listen for new messages
     useEffect(() => {
         if (!activeConversationId) return;
-
         const channel = supabase.channel(`messages:${activeConversationId}`)
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `conversation_id=eq.${activeConversationId}` },
-                (payload) => {
-                    setMessages(currentMessages => [...currentMessages, payload.new]);
-                }
+                (payload) => { setMessages(currentMessages => [...currentMessages, payload.new as Message]); }
             )
             .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
+        return () => { supabase.removeChannel(channel); };
     }, [activeConversationId, supabase]);
 
-    // Scroll to the bottom of the message list
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
     const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!newMessage.trim() || !activeConversationId) return;
-
         const messageContent = newMessage;
-        setNewMessage(''); // Optimistically clear the input
-        
+        setNewMessage('');
         await sendMessage(activeConversationId, messageContent);
     };
 
-    const getOtherParticipant = (convo: any) => {
-        if (!user) return { full_name: 'User', avatar_url: null };
-        return convo.participant_one.id === user.id ? convo.participant_two : convo.participant_one;
-    };
-
-
     return (
         <div className="bg-black text-white min-h-screen flex">
-            {/* --- Sidebar --- */}
             <aside className="w-64 bg-neutral-900/50 border-r border-neutral-800 p-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-10"><Gamepad2 className="h-7 w-7 text-pink-400" /><h1 className="text-xl font-bold">Immersive Ads</h1></div>
                 <nav className="flex flex-col gap-2">
@@ -102,28 +94,21 @@ export default function MessagesPage() {
                 <div className="mt-auto"><form action={signOut}><button className="w-full flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><LogOut size={18} /><span>Sign Out</span></button></form></div>
             </aside>
 
-            {/* --- Main Content Area --- */}
             <main className="flex-1 flex" style={{ height: '100vh' }}>
-                {/* Conversation List */}
                 <div className="w-1/3 border-r border-neutral-800 flex flex-col">
                     <div className="p-4 border-b border-neutral-800"><h2 className="text-xl font-bold">Conversations</h2></div>
                     <div className="flex-grow overflow-y-auto">
-                        {conversations.map(convo => {
-                            const otherUser = getOtherParticipant(convo);
-                            return (
-                                <div key={convo.id} onClick={() => setActiveConversationId(convo.id)} className={`p-4 flex items-center gap-3 cursor-pointer border-l-4 ${activeConversationId === convo.id ? 'bg-neutral-800 border-pink-500' : 'border-transparent hover:bg-neutral-800/50'}`}>
-                                    <div className="w-10 h-10 rounded-full bg-neutral-700"></div>
-                                    <div>
-                                        <p className="font-semibold">{otherUser.full_name}</p>
-                                        <p className="text-sm text-neutral-400">View conversation</p>
-                                    </div>
+                        {conversations.map(convo => (
+                            <div key={convo.conversation_id} onClick={() => setActiveConversationId(convo.conversation_id)} className={`p-4 flex items-center gap-3 cursor-pointer border-l-4 ${activeConversationId === convo.conversation_id ? 'bg-neutral-800 border-pink-500' : 'border-transparent hover:bg-neutral-800/50'}`}>
+                                <div className="w-10 h-10 rounded-full bg-neutral-700"></div>
+                                <div>
+                                    <p className="font-semibold">{convo.other_participant_full_name}</p>
+                                    <p className="text-sm text-neutral-400">View conversation</p>
                                 </div>
-                            );
-                        })}
+                            </div>
+                        ))}
                     </div>
                 </div>
-
-                {/* Chat Window */}
                 <div className="w-2/3 flex flex-col">
                     {activeConversationId ? (
                         <>

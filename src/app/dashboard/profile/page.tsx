@@ -6,7 +6,7 @@ import Link from 'next/link'
 import ProfileForm from './ProfileForm' // Import the client component
 
 export default async function ProfilePage() {
-  const supabase = createClient()
+  const supabase = await createClient() // Add await here
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) { return redirect('/login') }
 

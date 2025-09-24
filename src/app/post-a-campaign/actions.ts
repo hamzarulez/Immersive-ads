@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function createCampaign(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient() // Add await here
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {

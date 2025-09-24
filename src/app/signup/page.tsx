@@ -1,16 +1,36 @@
 "use client";
 
-import React, { useState } from 'react'; // <-- THIS IS THE FIX
-import { useRouter } from 'next/navigation';
-import { createClient } from '../../utils/supabase/client';
+import React, { useState } from 'react';
+// --- FIX: Removed unused 'useRouter' import ---
+import { createClient } from '@/utils/supabase/client';
 import { Mail, Lock, User, ChevronsRight, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import Header from '../../components/landing/Header';
-import Footer from '../../components/landing/Footer';
-import { Button } from '../../components/ui/button';
+import Header from '@/components/landing/Header';
+import Footer from '@/components/landing/Footer';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+// --- FIX: Import ChangeEvent for the select handler ---
+import type { ChangeEvent } from 'react';
+
+// Define the shape of the props our icon component should accept
+interface IconProps {
+    size?: number;
+    className?: string;
+}
+
+// Update InputFieldProps to expect a Component Type, not a React Element
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    IconComponent: React.ComponentType<IconProps>;
+}
+
+const InputField = ({ IconComponent, ...props }: InputFieldProps) => (
+    <div className="relative">
+        <IconComponent size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
+        <input {...props} className="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg py-3 pl-10 pr-4 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow" />
+    </div>
+);
+
 
 export default function SignupPage() {
-  const router = useRouter();
   const supabase = createClient();
 
   const [email, setEmail] = useState('');
@@ -45,6 +65,10 @@ export default function SignupPage() {
     setIsSubmitting(false);
   };
 
+  const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+      setRole(e.target.value as 'brand' | 'creator');
+  }
+
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">
       <Header />
@@ -75,17 +99,18 @@ export default function SignupPage() {
                   </div>
                 )}
                 
-                <InputField icon={<User />} type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-                <InputField icon={<Mail />} type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <InputField icon={<Lock />} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <InputField IconComponent={User} type="text" placeholder="Full Name" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+                <InputField IconComponent={Mail} type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <InputField IconComponent={Lock} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 
                 <div className="relative">
                     <ChevronsRight size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
                     <select 
                         value={role}
-                        onChange={(e) => setRole(e.target.value as any)}
+                        // --- FIX: Use a properly typed event handler ---
+                        onChange={handleRoleChange}
                         required 
-                        className="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg py-3 pl-10 pr-4 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow appearance-none"
+                        className="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow appearance-none"
                     >
                         <option value="" disabled>I am a...</option>
                         <option value="brand">Brand / Advertiser</option>
@@ -112,15 +137,3 @@ export default function SignupPage() {
     </div>
   );
 }
-
-// Helper component for input fields to keep the form clean
-// FIX 2: Define a specific type for props to avoid `any`
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    icon: React.ReactElement; // Expect a React element (like <User />)
-}
-const InputField = ({ icon, ...props }: InputFieldProps) => (
-    <div className="relative">
-        {React.cloneElement(icon, { size: 16, className: "absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" })}
-        <input {...props} className="w-full bg-neutral-800/50 border border-neutral-700 rounded-lg py-3 pl-10 pr-4 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-shadow" />
-    </div>
-);

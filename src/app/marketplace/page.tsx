@@ -3,13 +3,31 @@ import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Gamepad2, Briefcase, PlusCircle, UserCircle } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'; // Import Image
 
-// --- Creator Listing Card ---
-const CreatorListingCard = ({ listing }: { listing: any }) => (
+// --- FIX: Define specific types ---
+interface CreatorListing {
+  id: number;
+  avatar_url?: string;
+  full_name?: string;
+  created_at: string;
+  creator_id: string;
+  dau: number;
+  description: string;
+  game_title: string;
+  platform: string;
+  status: string;
+}
+
+interface ListingCardProps {
+    listing: CreatorListing;
+}
+const CreatorListingCard = ({ listing }: ListingCardProps) => (
     <div className="bg-neutral-800/50 border border-neutral-700/50 rounded-xl p-6 hover:border-pink-500/50 transition-colors">
         <div className="flex items-center gap-4 mb-4">
             {listing.avatar_url ? (
-                <img src={listing.avatar_url} alt={listing.full_name || 'Creator'} className="w-12 h-12 rounded-full object-cover" />
+                // --- FIX: Use Image component ---
+                <Image src={listing.avatar_url} alt={listing.full_name || 'Creator'} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
             ) : (
                 <div className="w-12 h-12 rounded-full bg-neutral-700 flex items-center justify-center">
                     <UserCircle size={24} className="text-neutral-500" />
@@ -33,25 +51,43 @@ const CreatorListingCard = ({ listing }: { listing: any }) => (
     </div>
 );
 
-// --- UPDATED Brand Listing Card ---
-// It now receives a real `campaign` object from our RPC call
-const BrandListingCard = ({ campaign }: { campaign: any }) => (
+// --- FIX: Define specific types ---
+interface BrandCampaign {
+  id: number;
+  poster_avatar_url?: string;
+  brand_name: string;
+  campaign_title: string;
+  description: string;
+  budget_range: string;
+  // Optional fields for compatibility with RPC response
+  brand_id?: string;
+  created_at?: string;
+  platforms?: string[];
+  poster_full_name?: string;
+  status?: string;
+}
+
+interface BrandCardProps {
+    brand: BrandCampaign;
+}
+const BrandListingCard = ({ brand }: BrandCardProps) => (
     <div className="bg-neutral-800/50 border border-neutral-700/50 rounded-xl p-6 hover:border-indigo-500/50 transition-colors">
          <div className="flex items-center gap-4 mb-4">
-            {campaign.poster_avatar_url ? (
-                <img src={campaign.poster_avatar_url} alt={campaign.poster_full_name} className="w-12 h-12 rounded-full object-cover" />
+            {brand.poster_avatar_url ? (
+                // --- FIX: Use Image component ---
+                <Image src={brand.poster_avatar_url} alt={brand.brand_name} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
             ) : (
                 <div className="w-12 h-12 rounded-full bg-neutral-700 flex items-center justify-center"><Briefcase size={24} className="text-neutral-500"/></div>
             )}
             <div>
-                <h3 className="font-bold text-white">{campaign.brand_name}</h3>
-                <p className="text-sm text-neutral-400">{campaign.campaign_title}</p>
+                <h3 className="font-bold text-white">{brand.brand_name}</h3>
+                <p className="text-sm text-neutral-400">{brand.campaign_title}</p>
             </div>
         </div>
-            <p className="text-sm text-neutral-300 mb-4 line-clamp-2 h-10">{campaign.description}</p>
-                <div className="flex justify-between items-center">
-            <p className="text-lg font-bold text-green-400">{campaign.budget_range}</p>
-            <Link href={`/campaign/${campaign.id}`}>
+        <p className="text-sm text-neutral-300 mb-4 line-clamp-2 h-10">{brand.description}</p>
+        <div className="flex justify-between items-center">
+            <p className="text-lg font-bold text-green-400">{brand.budget_range}</p>
+            <Link href={`/campaign/${brand.id}`}>
                 <Button variant="outline" className="rounded-full border-neutral-700 hover:bg-neutral-800">View Campaign</Button>
             </Link>
         </div>
@@ -60,11 +96,10 @@ const BrandListingCard = ({ campaign }: { campaign: any }) => (
 
 
 export default async function MarketplacePage() {
-    const supabase = createClient()
+    const supabase = await createClient() // Add await here
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { return redirect('/login') }
 
-    // --- Fetch REAL data for BOTH sides of the marketplace ---
     const { data: creatorListings, error: listingsError } = await supabase.rpc('get_active_listings');
     const { data: brandCampaigns, error: campaignsError } = await supabase.rpc('get_active_campaigns');
 
@@ -98,7 +133,6 @@ export default async function MarketplacePage() {
                         </Link>
                     </div>
                 </section>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <section>
                         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2"><Gamepad2 /> Creators for Hire</h2>
@@ -116,7 +150,7 @@ export default async function MarketplacePage() {
                         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2"><Briefcase /> Brand Campaigns</h2>
                          <div className="space-y-6">
                             {brandCampaigns && brandCampaigns.length > 0 ? (
-                                brandCampaigns.map(campaign => <BrandListingCard key={campaign.id} campaign={campaign} />)
+                                brandCampaigns.map(campaign => <BrandListingCard key={campaign.id} brand={campaign} />)
                             ) : (
                                 <div className="bg-neutral-800/50 border border-dashed border-neutral-700 rounded-xl p-8 text-center text-neutral-500">
                                     <p>No brand campaigns have been posted yet.</p>

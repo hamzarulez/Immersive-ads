@@ -4,7 +4,7 @@ import { signOut } from '@/app/actions'
 import { Gamepad2, Briefcase, BarChart2, UserCircle, LogOut } from 'lucide-react'
 
 export default async function BrandDashboardPage() {
-  const supabase = createClient()
+  const supabase = await createClient() // Add await here
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user || user.user_metadata?.role !== 'brand') {

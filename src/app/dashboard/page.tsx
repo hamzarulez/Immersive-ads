@@ -2,9 +2,16 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/app/actions';
 import { DollarSign, Banknote, Hourglass, LogOut, LayoutDashboard, Briefcase, BarChart2, UserCircle, Gamepad2 } from 'lucide-react';
+import Link from 'next/link'; // Import Link
 
-// --- Reusable Stat Card Component ---
-const StatCard = ({ title, amount, icon: Icon, color }: any) => (
+// --- FIX: Define specific types ---
+interface StatCardProps {
+    title: string;
+    amount: string;
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+}
+const StatCard = ({ title, amount, icon: Icon, color }: StatCardProps) => (
   <div className="bg-neutral-800/50 border border-neutral-700/50 rounded-xl p-6">
     <div className="flex items-center justify-between mb-2">
       <p className="text-sm text-neutral-400">{title}</p>
@@ -14,8 +21,17 @@ const StatCard = ({ title, amount, icon: Icon, color }: any) => (
   </div>
 );
 
-// --- Reusable Transaction Row Component ---
-const TransactionRow = ({ brand, platform, amount, commission, share, status, date }: any) => (
+// --- FIX: Define specific types ---
+interface TransactionRowProps {
+    brand: string | null;
+    platform: string | null;
+    amount: string;
+    commission: string;
+    share: string;
+    status: string | null;
+    date: string;
+}
+const TransactionRow = ({ brand, platform, amount, commission, share, status, date }: TransactionRowProps) => (
   <div className="grid grid-cols-12 gap-4 items-center p-4 rounded-lg hover:bg-neutral-800 transition-colors border-b border-neutral-800 last:border-b-0">
     <div className="col-span-3">
       <p className="font-semibold text-white">{brand}</p>
@@ -31,72 +47,53 @@ const TransactionRow = ({ brand, platform, amount, commission, share, status, da
   </div>
 );
 
-// --- The Main Dashboard Page ---
 export default async function DashboardPage() {
-  const supabase = createClient();
+  const supabase = await createClient(); // Add await here
 
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return redirect('/login');
-  }
+  if (!user) { return redirect('/login'); }
 
-  // Fetch real data from the database
   const { data: transactions, error } = await supabase
     .from('transactions')
     .select('*')
-    .eq('creator_id', user.id) // RLS also enforces this, but it's good practice
+    .eq('creator_id', user.id)
     .order('release_date', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching transactions:', error.message);
-    // You could render a friendly error message to the user here
-    // For now, we'll just show an empty state.
-  }
+  if (error) { console.error('Error fetching transactions:', error.message); }
   
-  // Calculate real numbers from the fetched data
   const totalEarnings = transactions?.reduce((sum, t) => sum + (t.creator_share || 0), 0) ?? 0;
   const availableForPayout = transactions?.filter(t => t.status === 'Released').reduce((sum, t) => sum + (t.creator_share || 0), 0) ?? 0;
   const inEscrow = transactions?.filter(t => t.status === 'In Escrow').reduce((sum, t) => sum + (t.creator_share || 0), 0) ?? 0;
-  const pendingClearance = 0; // Placeholder for now
+  const pendingClearance = 0;
 
   const userFullName = user.user_metadata?.full_name || 'Creator';
   
-  // Helper to format numbers as currency
   const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 
   return (
     <div className="bg-black text-white min-h-screen flex">
-      {/* --- Sidebar Navigation --- */}
       <aside className="w-64 bg-neutral-900/50 border-r border-neutral-800 p-6 flex flex-col">
-        <div className="flex items-center gap-3 mb-10">
-            <Gamepad2 className="h-7 w-7 text-pink-400" />
-            <h1 className="text-xl font-bold">Immersive Ads</h1>
-        </div>
-        <nav className="flex flex-col gap-2">
-            <a href="/dashboard" className="flex items-center gap-3 bg-neutral-800 text-white px-4 py-2 rounded-lg font-semibold"><LayoutDashboard size={18} /> Overview</a>
-            <a href="/dashboard/projects" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><Briefcase size={18} /> Projects</a>
-            <a href="/dashboard/analytics" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><BarChart2 size={18} /> Analytics</a>
-            <a href="/dashboard/profile" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><UserCircle size={18} /> Profile</a>
-        </nav>
-        <div className="mt-auto">
-            <form action={signOut}>
-                <button className="w-full flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg">
-                    <LogOut size={18} />
-                    <span>Sign Out</span>
-                </button>
-            </form>
-        </div>
-      </aside>
+          <div className="flex items-center gap-3 mb-10">
+              <Gamepad2 className="h-7 w-7 text-pink-400" />
+              <h1 className="text-xl font-bold">Immersive Ads</h1>
+          </div>
+          <nav className="flex flex-col gap-2">
+              <Link href="/dashboard" className="flex items-center gap-3 bg-neutral-800 text-white px-4 py-2 rounded-lg font-semibold"><LayoutDashboard size={18} /> Overview</Link>
+              <Link href="/dashboard/projects" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><Briefcase size={18} /> Projects</Link>
+              <Link href="/dashboard/analytics" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><BarChart2 size={18} /> Analytics</Link>
+              <Link href="/dashboard/profile" className="flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><UserCircle size={18} /> Profile</Link>
+          </nav>
+          <div className="mt-auto">
+              <form action={signOut}><button className="w-full flex items-center gap-3 text-neutral-400 hover:bg-neutral-800 hover:text-white px-4 py-2 rounded-lg"><LogOut size={18} /><span>Sign Out</span></button></form>
+          </div>
+        </aside>
 
-      {/* --- Main Content Area --- */}
       <main className="flex-1 p-8 overflow-y-auto">
         <header className="mb-8">
-            <p className="text-xs text-red-500">DEBUG: Logged in as user ID: {user.id}</p>
             <h2 className="text-3xl font-bold text-white">Welcome Back, {userFullName}!</h2>
             <p className="text-neutral-400">Here&apos;s a summary of your creator account.</p>
         </header>
 
-        {/* Section 1: Financial Transparency and Earnings Hub */}
         <section>
             <h3 className="text-xl font-semibold mb-4">Earnings Hub</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -125,11 +122,11 @@ export default async function DashboardPage() {
                             key={t.id}
                             brand={t.brand_name}
                             platform={t.platform}
-                            amount={formatCurrency(t.contract_value)}
-                            commission={`-${formatCurrency(t.platform_fee)}`}
-                            share={`+${formatCurrency(t.creator_share)}`}
+                            amount={formatCurrency(t.contract_value || 0)}
+                            commission={`-${formatCurrency(t.platform_fee || 0)}`}
+                            share={`+${formatCurrency(t.creator_share || 0)}`}
                             status={t.status}
-                            date={new Date(t.release_date).toLocaleDateString()}
+                            date={new Date(t.release_date || new Date()).toLocaleDateString()}
                         />
                     ))
                 ) : (

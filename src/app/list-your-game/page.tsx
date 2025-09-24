@@ -10,7 +10,7 @@ export default async function ListYourGamePage({
 }: {
   searchParams: { message?: string }
 }) {
-  const supabase = createClient()
+  const supabase = await createClient() // Add await here
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {

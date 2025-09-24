@@ -6,21 +6,19 @@ import { Gamepad2, Sparkles, MoveRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// --- Demo Data with Polished Copy ---
 const demos = [
     {
         id: 'fashion',
         title: 'Fashion Brand Integration',
-        // Copy focuses on scale and organic reach
-        description: 'Imagine your latest collection becoming the centerpiece of a viral trend. This filter, organically shared in over 300,000 user-generated posts with some reaching 1,000,000+ views per post., places your brand at the heart of culture, achieving billions of authentic impressions that traditional ads can\'t buy.',
+        // --- FIX: Escape apostrophe ---
+        description: 'Imagine your latest collection becoming the centerpiece of a viral trend. This filter, organically shared in over 300,000 user-generated videos, places your brand at the heart of culture, achieving billions of authentic impressions that traditional ads can\'t buy.',
         videoSrc: '/demos/FashionDemo.mp4',
     },
     {
         id: 'makeup',
-        title: 'Cosmetics Products',
-        // Copy focuses on influence and targeted marketing
-        description: 'What if every beauty influencer was discovering and reviewing your product line? This filter puts your cosmetics directly into the hands of creators, sparking thousands of authentic video reviews and driving product discovery on a massive scale. Turn passive viewers into active customers. ',
-        videoSrc: '/demos/MakeupDemo.mp4',
+        title: 'Cosmetics Product Discovery',
+        description: 'What if every beauty influencer was discovering and reviewing your product line? This filter puts your cosmetics directly into the hands of creators, sparking thousands of authentic video reviews and driving product discovery on a massive scale. Turn passive viewers into active customers.',
+        videoSrc: '/demos/MakeupDemos.mp4',
     }
 ];
 
@@ -45,7 +43,6 @@ export default function DemoPage() {
 
             <main className="container mx-auto p-6 mt-12">
                 <div className="max-w-4xl mx-auto">
-                    {/* --- Refined Header Section --- */}
                     <div className="text-center mb-12">
                         <div className="inline-block bg-neutral-800/50 rounded-full px-4 py-2 mb-4 border border-neutral-700">
                             <p className="flex items-center gap-2 text-sm text-pink-300"><Sparkles size={16} /> Exclusive Demos</p>
@@ -54,13 +51,11 @@ export default function DemoPage() {
                             Go Beyond the Banner Ad
                         </h1>
                         <p className="text-lg text-neutral-400 max-w-3xl mx-auto">
-                            TikTok racks up 1 billion views every single day. Yes, billion with a B. Imagine getting a slice of that attention. With TikTok’s interactive filters, your ads are experiences. Users play, share, and create content around your product, turning every view into engagement. More views. More shares. More comments. More buzz. Your product, everywhere. 
+                            See how leading brands are achieving unprecedented reach by integrating their products directly into the fabric of social and gaming experiences.
                         </p>
                     </div>
 
-                    {/* Video Player Section */}
                     <div className="bg-gradient-to-b from-neutral-900 to-black border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl shadow-pink-500/10">
-                        {/* --- Moved Switcher Inside with better styling --- */}
                         <div className="p-6 border-b border-neutral-800">
                             <div className="bg-neutral-800/50 rounded-full p-1 flex items-center space-x-1 max-w-md mx-auto">
                                 {demos.map(demo => (
@@ -74,7 +69,6 @@ export default function DemoPage() {
                             </div>
                         </div>
                         
-                        {/* --- Phone Player with Description Beside it for better layout --- */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center p-6 md:p-8">
                             <div className="flex justify-center">
                                 <div className="w-full max-w-[250px] aspect-[9/16] bg-black rounded-[30px] p-2 border-4 border-neutral-700 shadow-lg">
@@ -94,11 +88,10 @@ export default function DemoPage() {
                         </div>
                     </div>
 
-                    {/* --- New Call to Action Section --- */}
                     <div className="text-center mt-16">
                         <h3 className="text-3xl font-bold">Ready to Launch Your Campaign?</h3>
                         <p className="text-neutral-400 mt-3 mb-6 max-w-xl mx-auto">
-                            Our team can help you design a custom, immersive ad experience tailored to your brand's unique goals. Let's create something unforgettable.
+                            Our team can help you design a custom, immersive ad experience tailored to your brand&apos;s unique goals. Let&apos;s create something unforgettable.
                         </p>
                         <Link href="/#contact">
                             <Button size="lg" className="bg-pink-500 hover:bg-pink-600 rounded-full px-8 py-3 text-base font-semibold">
