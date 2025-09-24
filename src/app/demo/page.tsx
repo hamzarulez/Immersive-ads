@@ -213,8 +213,8 @@ export default function DemoPage() {
                                 <BarChart data={impressionsData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
                                     <XAxis dataKey="category" stroke="#a3a3a3" />
-                                    <YAxis stroke="#a3a3a3" tickFormatter={(value) => `${(value / 1000000000).toFixed(1)}B`} />
-                                    <Tooltip formatter={(value) => [`${(value / 1000000).toFixed(0)}M`, 'Impressions']} />
+                                    <YAxis stroke="#a3a3a3" tickFormatter={(value) => `${((value as number) / 1000000000).toFixed(1)}B`} />
+                                    <Tooltip formatter={(value) => [`${((value as number) / 1000000).toFixed(0)}M`, 'Impressions']} />
                                     <Bar dataKey="impressions" fill="url(#gradient-pink)" name="Impressions" />
                                     <defs>
                                         <linearGradient id="gradient-pink" x1="0" y1="0" x2="0" y2="1">
