@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { signOut } from '@/app/actions';
+import { signOut } from '../../../app/actions';
 import { LayoutDashboard, Briefcase, BarChart2, UserCircle, LogOut, Gamepad2, ThumbsUp, Medal, DollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart } from 'recharts';

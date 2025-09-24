@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
-import { Button } from '@/components/ui/button'
+import { createClient } from '../../../utils/supabase/client'
+import { Button } from '../../../components/ui/button'
 import type { User } from '@supabase/supabase-js' // Import the User type
 import { Database } from '@/types/supabase' // Import Database for profile typing
 
