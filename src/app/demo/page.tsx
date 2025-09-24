@@ -12,13 +12,13 @@ const demos = [
         title: 'Fashion Brand Integration',
         // --- FIX: Escape apostrophe ---
         description: 'Imagine your latest collection becoming the centerpiece of a viral trend. This filter, organically shared in over 300,000 user-generated videos, places your brand at the heart of culture, achieving billions of authentic impressions that traditional ads can\'t buy.',
-        videoSrc: '/demos/FashionDemo.mp4',
+        videoSrc: 'https://xneo00qdb5uyygok.public.blob.vercel-storage.com/FashionDemo.mp4',
     },
     {
         id: 'makeup',
         title: 'Cosmetics Product Discovery',
         description: 'What if every beauty influencer was discovering and reviewing your product line? This filter puts your cosmetics directly into the hands of creators, sparking thousands of authentic video reviews and driving product discovery on a massive scale. Turn passive viewers into active customers.',
-        videoSrc: '/demos/MakeupDemos.mp4',
+        videoSrc: 'https://xneo00qdb5uyygok.public.blob.vercel-storage.com/MakeupDemo.mp4',
     }
 ];
 
@@ -73,7 +73,7 @@ export default function DemoPage() {
                             <div className="flex justify-center">
                                 <div className="w-full max-w-[250px] aspect-[9/16] bg-black rounded-[30px] p-2 border-4 border-neutral-700 shadow-lg">
                                     <div className="w-full h-full rounded-[22px] overflow-hidden">
-                                        <video key={activeDemo.videoSrc} className="w-full h-full object-cover" controls autoPlay muted loop playsInline>
+                                        <video key={activeDemo.videoSrc} className="w-full h-full object-cover" controls autoPlay muted loop playsInline preload="metadata">
                                             <source src={activeDemo.videoSrc} type="video/mp4" />
                                             Your browser does not support the video tag.
                                         </video>
