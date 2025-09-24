@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import { signOut } from '@/app/actions';
+import { createClient } from '../../utils/supabase/client';
+import { signOut } from '../../app/actions';
 import { sendMessage } from './actions';
 import { LayoutDashboard, Briefcase, BarChart2, UserCircle, LogOut, Gamepad2, Send } from 'lucide-react';
 import Link from 'next/link';

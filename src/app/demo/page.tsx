@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Gamepad2, Sparkles, MoveRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Button } from '../../components/ui/button';
+import { cn } from '../../lib/utils';
 
 const demos = [
     {
