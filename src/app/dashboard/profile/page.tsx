@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import { signOut } from '@/app/actions'
+import { createClient } from '../../../utils/supabase/server'
+import { signOut } from '../../../app/actions'
 import { LayoutDashboard, Briefcase, BarChart2, UserCircle, LogOut, Gamepad2 } from 'lucide-react'
 import Link from 'next/link'
 import ProfileForm from './ProfileForm' // Import the client component

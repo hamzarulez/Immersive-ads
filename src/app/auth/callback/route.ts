@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../../utils/supabase/server'
 import { NextResponse } from 'next/server'
 
 // This route handles the redirect after a user confirms their email.

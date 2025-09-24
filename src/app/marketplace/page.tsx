@@ -1,6 +1,6 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../utils/supabase/server'
 import { redirect } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../components/ui/button'
 import { Gamepad2, Briefcase, PlusCircle, UserCircle } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'; // Import Image

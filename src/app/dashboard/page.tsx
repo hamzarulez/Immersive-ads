@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/app/actions';
+import { createClient } from '../../utils/supabase/server';
+import { signOut } from '../../app/actions';
 import { DollarSign, Banknote, Hourglass, LogOut, LayoutDashboard, Briefcase, BarChart2, UserCircle, Gamepad2 } from 'lucide-react';
 import Link from 'next/link'; // Import Link
 

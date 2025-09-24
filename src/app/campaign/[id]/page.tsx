@@ -1,9 +1,9 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../../utils/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image' // Import the Image component
 import { Gamepad2, Globe, Briefcase, Mail, DollarSign, Pin } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../../components/ui/button'
 
 export default async function CampaignPage({ params }: { params: { id: string } }) {
     const supabase = await createClient() // Add await here

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
-import { signOut } from '@/app/actions'
+import { createClient } from '../../utils/supabase/server'
+import { signOut } from '../../app/actions'
 import { Gamepad2, Briefcase, BarChart2, UserCircle, LogOut } from 'lucide-react'
 
 export default async function BrandDashboardPage() {

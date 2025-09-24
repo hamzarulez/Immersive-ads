@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../utils/supabase/server'
 // --- FIX: Removed unused 'redirect' import ---
 
 export async function getOrCreateConversation(otherUserId: string) {
