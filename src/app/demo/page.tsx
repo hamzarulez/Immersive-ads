@@ -71,6 +71,21 @@ const engagementData = [
     { week: 'Week 4', rate: 65 },
 ];
 
+const CustomTooltip = ({ active, payload, label, valueFormatter }) => {
+  if (active && payload && payload.length) {
+    const formattedValue = valueFormatter(payload[0].value);
+    return (
+      <div className="bg-neutral-800/95 backdrop-blur-sm border border-neutral-700 rounded-lg p-3 shadow-xl">
+        <p className="text-sm font-semibold text-neutral-400 mb-1 capitalize">{label}</p>
+        <p className="text-base text-white font-bold">
+          {payload[0].name}: {formattedValue}
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function DemoPage() {
     const [activeDemo, setActiveDemo] = useState(demos[0]);
     const [budget, setBudget] = useState('');
@@ -214,7 +229,13 @@ export default function DemoPage() {
                                     <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
                                     <XAxis dataKey="category" stroke="#a3a3a3" />
                                     <YAxis stroke="#a3a3a3" tickFormatter={(value) => `${((value as number) / 1000000000).toFixed(1)}B`} />
-                                    <Tooltip formatter={(value) => [`${((value as number) / 1000000).toFixed(0)}M`, 'Impressions']} />
+                                    <Tooltip 
+                                      content={
+                                        <CustomTooltip 
+                                          valueFormatter={(value) => `${((value as number) / 1000000).toFixed(0)}M`} 
+                                        />
+                                      } 
+                                    />
                                     <Bar dataKey="impressions" fill="url(#gradient-pink)" name="Impressions" />
                                     <defs>
                                         <linearGradient id="gradient-pink" x1="0" y1="0" x2="0" y2="1">
@@ -238,8 +259,14 @@ export default function DemoPage() {
                                     <CartesianGrid strokeDasharray="3 3" stroke="#404040" />
                                     <XAxis dataKey="week" stroke="#a3a3a3" />
                                     <YAxis stroke="#a3a3a3" />
-                                    <Tooltip formatter={(value) => [`${value}%`, 'Engagement Rate']} />
-                                    <Line type="monotone" dataKey="rate" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                                    <Tooltip 
+                                      content={
+                                        <CustomTooltip 
+                                          valueFormatter={(value) => `${value}%`} 
+                                        />
+                                      } 
+                                    />
+                                    <Line type="monotone" dataKey="rate" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', strokeWidth: 2 }} activeDot={{ r: 6 }} name="Engagement Rate" />
                                 </LineChart>
                             </ResponsiveContainer>
                             <p className="text-center text-neutral-400 mt-4">From launch to peak: 65% view-through in 4 weeks.</p>
