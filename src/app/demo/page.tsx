@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useInView } from 'framer-motion';  // For scroll animations
 import { Gamepad2, Sparkles, MoveRight, BarChart3, Users, DollarSign, TrendingUp } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { cn } from '../../lib/utils';
@@ -72,6 +71,13 @@ const engagementData = [
   { week: 'Week 4', rate: 65 },
 ];
 
+// Type for payload items
+type PayloadItem = {
+  name: string;
+  value: number;
+  color?: string;
+};
+
 // Custom tooltip (typed with Recharts TooltipProps)
 const CustomTooltip = ({
   active,
@@ -79,15 +85,17 @@ const CustomTooltip = ({
   label,
   valueFormatter,
 }: TooltipProps<number, string> & {
-  valueFormatter: (value: any) => string;
+  valueFormatter: (value: number) => string;
 }) => {
   if (active && payload && payload.length) {
-    const formattedValue = valueFormatter(payload[0].value);
+    const item = payload[0] as PayloadItem;
+    const formattedValue = valueFormatter(item.value);
+
     return (
       <div className="bg-neutral-800/95 backdrop-blur-sm border border-neutral-700 rounded-lg p-3 shadow-xl">
         <p className="text-sm font-semibold text-neutral-400 mb-1 capitalize">{label}</p>
         <p className="text-base text-white font-bold">
-          {payload[0].name}: {formattedValue}
+          {item.name}: {formattedValue}
         </p>
       </div>
     );
