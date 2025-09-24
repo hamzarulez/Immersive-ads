@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 // --- FIX: Removed unused 'useRouter' import ---
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '../../utils/supabase/client';
 import { Mail, Lock, User, ChevronsRight, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import Header from '@/components/landing/Header';
-import Footer from '@/components/landing/Footer';
-import { Button } from '@/components/ui/button';
+import Header from '../../components/landing/Header';
+import Footer from '../../components/landing/Footer';
+import { Button } from '../../components/ui/button';
 import Link from 'next/link';
 // --- FIX: Import ChangeEvent for the select handler ---
 import type { ChangeEvent } from 'react';
