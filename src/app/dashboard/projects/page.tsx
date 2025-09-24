@@ -4,7 +4,7 @@ import { signOut } from '../../../app/actions';
 import { LayoutDashboard, Briefcase, BarChart2, UserCircle, LogOut, Gamepad2, Megaphone, CheckCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../../../components/ui/button';
-import { Database } from '@/types/supabase'; // Import Database for typing
+import { Database } from '../../../types/supabase'; // Import Database for typing
 
 // --- FIX: Define specific type for props ---
 type Project = Database['public']['Tables']['projects']['Row']
