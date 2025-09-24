@@ -5,9 +5,10 @@ import Image from 'next/image' // Import the Image component
 import { Gamepad2, Globe, Briefcase, Mail, DollarSign, Pin } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
 
-export default async function CampaignPage({ params }: { params: { id: string } }) {
+export default async function CampaignPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params; // Await params to resolve the Promise
     const supabase = await createClient() // Add await here
-    const campaignId = parseInt(params.id, 10);
+    const campaignId = parseInt(id, 10);
 
     const { data: campaign } = await supabase
         .rpc('get_campaign_details', { p_campaign_id: campaignId })
