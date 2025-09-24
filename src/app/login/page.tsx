@@ -1,10 +1,10 @@
 // page.tsx
 import { login } from './actions'
-import Header from '@/components/landing/Header'
-import Footer from '@/components/landing/Footer'
+import Header from '../../components/landing/Header'
+import Footer from '../../components/landing/Footer'
 import Link from 'next/link'
 import { Mail, Lock, AlertTriangle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../components/ui/button'
 
 export default async function LoginPage({
   searchParams,

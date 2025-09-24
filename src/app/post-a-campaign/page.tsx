@@ -1,9 +1,9 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { createCampaign } from './actions'
 import { Gamepad2, AlertTriangle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '../../components/ui/button'
 
 export default async function PostCampaignPage({
   searchParams,
