@@ -230,11 +230,12 @@ export default function DemoPage() {
                                     <XAxis dataKey="category" stroke="#a3a3a3" />
                                     <YAxis stroke="#a3a3a3" tickFormatter={(value) => `${((value as number) / 1000000000).toFixed(1)}B`} />
                                     <Tooltip 
-                                      content={
+                                      content={(tooltipProps) => (
                                         <CustomTooltip 
+                                          {...tooltipProps}
                                           valueFormatter={(value) => `${((value as number) / 1000000).toFixed(0)}M`} 
                                         />
-                                      } 
+                                      )} 
                                     />
                                     <Bar dataKey="impressions" fill="url(#gradient-pink)" name="Impressions" />
                                     <defs>
@@ -260,11 +261,12 @@ export default function DemoPage() {
                                     <XAxis dataKey="week" stroke="#a3a3a3" />
                                     <YAxis stroke="#a3a3a3" />
                                     <Tooltip 
-                                      content={
+                                      content={(tooltipProps) => (
                                         <CustomTooltip 
+                                          {...tooltipProps}
                                           valueFormatter={(value) => `${value}%`} 
                                         />
-                                      } 
+                                      )} 
                                     />
                                     <Line type="monotone" dataKey="rate" stroke="#10B981" strokeWidth={3} dot={{ fill: '#10B981', strokeWidth: 2 }} activeDot={{ r: 6 }} name="Engagement Rate" />
                                 </LineChart>
