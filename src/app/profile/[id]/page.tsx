@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '../../../utils/supabase/server'
 import { notFound } from 'next/navigation'
 import ProfileClientPage from './ProfileClientPage' // Import the new client component
 
