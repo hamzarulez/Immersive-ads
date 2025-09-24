@@ -8,8 +8,9 @@ import { Button } from '../../components/ui/button'
 export default async function PostCampaignPage({
   searchParams,
 }: {
-  searchParams: { message?: string }
+  searchParams: Promise<{ message?: string }>
 }) {
+  const resolvedSearchParams = await searchParams; // Await searchParams to resolve the Promise
   const supabase = await createClient() // Add await here
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -80,10 +81,10 @@ export default async function PostCampaignPage({
                 Post Campaign
               </Button>
 
-              {searchParams.message && (
+              {resolvedSearchParams.message && (
                 <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm p-3 rounded-lg flex items-center gap-2 mt-4">
                   <AlertTriangle size={16} />
-                  <p>{searchParams.message}</p>
+                  <p>{resolvedSearchParams.message}</p>
                 </div>
               )}
             </form>
