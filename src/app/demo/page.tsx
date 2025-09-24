@@ -80,7 +80,7 @@ interface PayloadItem {
 interface CustomTooltipProps {
   active?: boolean;
   payload?: PayloadItem[];
-  label?: string;
+  label?: string | number;
   valueFormatter: (value: number) => string;
 }
 
